@@ -10,6 +10,8 @@ editor: visual
 #| warning: false
 library(tidyverse)
 post_meal_data <- read_csv2(here::here("data/post-meal-insulin.csv"))
+
+small_post_meal_data <- select(post_meal_data, id, Age, BMI, Group, auc_pg, auc_ins, glykemi)
 ```
 
 ## About me
@@ -94,38 +96,42 @@ ggplot(post_meal_data, aes(x = glykemi)) +
   geom_bar()
 ```
 
+## Plotting two continuous variables 
+
 ```{r side-by-side-figs}
 #| label: fig-bmi-glycemia
 #| fig-cap: "BMI and glycemia, side by side."
 #| fig-subcap:
-#| - "Distribution of BMI." 
-#| - "Number of those with glycemia."
+#|   - "Distribution of BMI."
+#|   - "Number of those with glycemia."
 #| layout-ncol: 2
-ggplot(post_meal_data, aes(x = BMI)) + 
+ggplot(post_meal_data, aes(x = BMI)) +
   geom_histogram()
 
-ggplot(post_meal_data, aes(x = glykemi)) + 
+ggplot(post_meal_data, aes(x = glykemi)) +
   geom_bar()
 
 ```
 
-## Plotting two continuous variables 
+## Selecting data 
 
 ```{r}
-ggplot(post_meal_data, aes(x = BMI, y = auc_pg)) +
-  geom_point()
+select(post_meal_data, Age)
+select(post_meal_data, Age, BMI, Weight)
+select(post_meal_data, -Group)
+```
+
+## Select helpers
+
+```{r}
+select(post_meal_data, starts_with("PG"))
 ```
 
 ```{r}
-ggplot(post_meal_data, aes(x = BMI, y = auc_pg)) +
-  geom_point() +
-  geom_smooth()
+select(post_meal_data, ends_with("DXA"))
 ```
 
 ```{r}
-#| fig-cap: "Scatterplot of BMI and the area under the curve for glucose."
-#| label: fig-bmi-auc-pg
-ggplot(post_meal_data, aes(x = BMI, y = auc_pg)) +
-  geom_point() +
-  geom_smooth()
+# All columns containing the number "0"
+select(post_meal_data, contains("0"))
 ```
