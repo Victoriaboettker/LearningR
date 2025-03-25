@@ -21,6 +21,12 @@ tidier_post_meal_data <- small_post_meal_data |>
   filter(glykemi == 0) |>
   select(-glykemi)
 tidier_post_meal_data
+
+tidied_post_meal_data <- tidier_post_meal_data |>
+  mutate(
+    insulin_glucose_ratio = auc_insulin / auc_glucose,
+    Group = if_else(Group == "CTR", "Control", "First-degree relative")
+  )
 ```
 
 ## About me
@@ -223,4 +229,23 @@ This lists both people who are in the control as well as anyone who is overweigh
 
 ```{r}
 tidier_post_meal_data
+```
+
+## Modifying columns 
+
+```{r}
+tidier_post_meal_data |>
+  mutate(insulin_glucose_ratio = auc_insulin / auc_glucose)
+```
+
+```{r}
+tidier_post_meal_data |>
+  mutate(
+    insulin_glucose_ratio = auc_insulin / auc_glucose,
+    Group = if_else(Group == "CTR", "Control", "First-degree relative")
+  )
+```
+
+```{r}
+tidied_post_meal_data
 ```
