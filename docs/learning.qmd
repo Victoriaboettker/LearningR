@@ -7,6 +7,7 @@ editor: visual
 
 ```{r setup}
 library(tidyverse)
+post_meal_data <- read_csv2(here::here("data/post-meal-insulin.csv"))
 ```
 
 ## About me
@@ -31,48 +32,13 @@ I am a 25-year-old **medical** student doing a research year at the department o
 
 The weather is medium. Not sunny, not rainy - but cloudy.
 
-##  Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Showing the data
 
 ```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
-
-```{r}
-2 + 2
+post_meal_data
 
 ```
 
 ```{r}
-weight_kilos<-100
-weight_kilos
-```
-
-```{r}
-# Character vector
-c("a", "b", "c")
-# Logic vector
-c(TRUE, FALSE, FALSE)
-# Numeric vector
-c(1, 5, 6)
-# Factor vector (special types of character vectors)
-factor(c("low", "high", "medium", "high"))
-```
-
-```{r}
-head(airquality)
+glimpse(post_meal_data)
 ```
