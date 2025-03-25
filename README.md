@@ -5,8 +5,6 @@ editor_options:
 ---
 Victoria Bøttker 
 
-The weather is great 
-
 TODO: Add more to the title of your project here
 
 # LearningR:
