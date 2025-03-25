@@ -249,3 +249,22 @@ tidier_post_meal_data |>
 ```{r}
 tidied_post_meal_data
 ```
+
+## Practice with filter and mutate
+
+1.  Use [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) to find how many participants have a BMI of more than or equal to 25 *and* less than or equal to 40, *and* are in the “FDR” `Group`. How many are there?
+
+2.  Create a `percent_body_fat` column with [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) by dividing the `Fat.mass.DXA` by the `Weight`, then multiplying by 100. *Hint*: In R, use `*` to multiply and `/` to divide. Then pipe to [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) to find out how many participants have a `percent_body_fat` greater than 30.
+
+```{r}
+# Task 1.
+post_meal_data |>
+  filter(BMI >= 25 & BMI <= 40 & Group == "FDR")
+
+# Task 2.
+post_meal_data |>
+  mutate(
+    percent_body_fat = (Fat.mass.DXA / Weight) * 100
+  ) |> 
+  filter(percent_body_fat > 30)
+```
