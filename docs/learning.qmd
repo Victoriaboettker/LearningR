@@ -12,6 +12,15 @@ library(tidyverse)
 post_meal_data <- read_csv2(here::here("data/post-meal-insulin.csv"))
 
 small_post_meal_data <- select(post_meal_data, id, Age, BMI, Group, auc_pg, auc_ins, glykemi)
+
+tidier_post_meal_data <- small_post_meal_data |>
+  rename(
+    auc_glucose = auc_pg,
+    auc_insulin = auc_ins
+  ) |>
+  filter(glykemi == 0) |>
+  select(-glykemi)
+tidier_post_meal_data
 ```
 
 ## About me
@@ -147,3 +156,71 @@ small_post_meal_data |>
 ```
 
 ##  
+
+```{r}
+# Task 1.
+post_meal_data |>
+  select(contains("OGTT"))
+
+# Task 2.
+post_meal_data |>
+  select(contains(".."), -contains("...")) 
+
+# Task 3.
+post_meal_data |>
+ rename(
+    P.Glucose.minus5.OGTT = P.Glucose..5.OGTT,
+    Insulin.minus5.OGTT.X = Insulin..5.OGTT.X
+  )
+
+# Task 4.
+post_meal_data |>
+  select(id, BMI, Length, Weight, Age) |>
+  rename(Height = Length)
+```
+
+## Filtering data 
+
+```{r}
+small_post_meal_data |>
+  filter(glykemi == 1)
+
+```
+
+This code could be read as:
+
+Take the post_meal_data dataset and then filter sp that only rows where glykemi is equal to 1 are kept.
+
+When a row in the glykemi column has the value 1, that row is kept. Otherwise, it is dropped.
+
+Let's see how many people are above "overweight" (BMi of 25) category, which we would use \<= for.
+
+```{r}
+small_post_meal_data |>
+  filter(BMI >= 25)
+```
+
+Let's see how many are in the "CTR" group again:
+
+```{r}
+small_post_meal_data |>
+  filter(Group == "CTR")
+```
+
+```{r}
+small_post_meal_data |>
+  filter(Group == "CTR", BMI >= 25)
+```
+
+When we use , to separate our logic conditions in filter (), it interprets that as using an &. Looks like most of the people who are overweight are in the control group. Lets replace the , with an \| to see how many people are in the control group OR have a BMI of 25 or more.
+
+```{r}
+small_post_meal_data |>
+  filter(Group == "CTR" | BMI >= 25)
+```
+
+This lists both people who are in the control as well as anyone who is overweight.
+
+```{r}
+tidier_post_meal_data
+```
