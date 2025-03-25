@@ -1,0 +1,78 @@
+---
+title: "Reproducible documents"
+author: "Victoria Bøttker"
+format: docx
+editor: visual
+---
+
+```{r setup}
+library(tidyverse)
+```
+
+## About me
+
+-   Victoria Bøttker
+
+-   Stud.med, Researh Year Student
+
+-   Aarhus University
+
+-   Aarhus University hospital, The department of Gynecology and Obstetrics
+
+I am a 25-year-old **medical** student doing a research year at the department of Gynecology and obstetrics. The research is about threatened *preterm birth*.
+
+## Simple code
+
+```{r}
+3*3
+```
+
+## Testing for Git 
+
+The weather is medium. Not sunny, not rainy - but cloudy.
+
+##  Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r}
+2 + 2
+
+```
+
+```{r}
+weight_kilos<-100
+weight_kilos
+```
+
+```{r}
+# Character vector
+c("a", "b", "c")
+# Logic vector
+c(TRUE, FALSE, FALSE)
+# Numeric vector
+c(1, 5, 6)
+# Factor vector (special types of character vectors)
+factor(c("low", "high", "medium", "high"))
+```
+
+```{r}
+head(airquality)
+```
