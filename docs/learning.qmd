@@ -44,3 +44,10 @@ post_meal_data
 ```{r}
 glimpse(post_meal_data)
 ```
+
+## Plot one continous variable
+
+```{r}
+#| fig-cap: "Distribution of BMI."ggplot(post_meal_data, aes(x = BMI)) + 
+  geom_histogram()
+```
