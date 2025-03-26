@@ -331,3 +331,71 @@ tidied_post_meal_data |>
     y = "Insulin to glucose ratio"
   )
 ```
+
+## Make multi-dimensional plots! 
+
+1.  Show the distribution of `percent_body_fat` by `Group` and `Age` category following these steps:
+
+    1.  Create a new column called `percent_body_fat` that calculates the percentage of body fat by dividing `Fat.mass.DXA` by `Weight` and multiplying by 100. You wrote this code previously in another exercise, you can re-use that code if you would like.
+
+    2.  Create a new column called `young` that groups people into two categories of being above (`"Old"`) or below (`"Young"`) 40 years of age by using [`if_else()`](https://dplyr.tidyverse.org/reference/if_else.html).
+
+    3.  Use [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html) and [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) to create the plot by putting `Group` on the x-axis, `percent_body_fat` on the y-axis, and colour the points by `young`. Use [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) to show the data points. The argument `width = 0.2` has already been set for you to have the points cluster together a bit more
+
+2.  Show the relationship between BMI and bone mineral density, splitting it by insulin sensitivity by following these steps:
+
+    1.  A new column called `insulin_glucose_ratio` has already been included in the template for you to use. Below this code, create a new column called `insulin_insensitive` that groups people into two categories of being above (`"Insensitive"`) or below (`"Sensitive"`) the [`mean()`](https://rdrr.io/r/base/mean.html) of `insulin_glucose_ratio` by using [`if_else()`](https://dplyr.tidyverse.org/reference/if_else.html).
+
+    2.  Use [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html) and [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) to create the plot by putting `BMI` on the x-axis, `Bone.mineral.DXA` on the y-axis, and colour the points by `insulin_insensitive`.
+
+    3.  Use [`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html) to show the data points, then also use [`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html) to show a line of best fit.
+
+    4.  Use [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html) to split the plot by `insulin_insensitive`.
+
+```{r}
+#| label: fig-multidimensional
+#| fig-cap: "Two, mult-dimensional plots of our data."
+#| fig-subcap:
+#|   - "Distribution of percent body fat by group and age category."
+#|   - "Relationship between BMI and bone mineral density, split by insulin sensitivity."
+#| layout-ncol: 2
+# Task 1.
+post_meal_data |>
+  mutate(
+    percent_body_fat = (Fat.mass.DXA / Weight) * 100,
+    young = if_else(Age < 40, "Young", "old")
+  ) |>
+  ggplot(aes(x = Group, y = percent_body_fat, colour = young)) +
+  geom_jitter(width = 0.2)
+
+# Task 2.
+post_meal_data |>
+  mutate(
+    insulin_glucose_ratio = (auc_ins / auc_pg),
+    insulin_insensitive = if_else(insulin_glucose_ratio > mean(insulin_glucose_ratio), "Insensitive", "Sensitive")
+  ) |>
+  ggplot(aes(x = BMI, y = Bone.mineral.DXA)) +
+  geom_point() +
+  geom_smooth() +
+  facet_grid(cols = vars(insulin_insensitive))
+```
+
+## Changing colours 
+
+```{r}
+post_meal_data |>
+  mutate(hyperglycemia = if_else(glykemi == 1, "Yes", "No")) |>
+  ggplot(aes(x = Group, fill = hyperglycemia)) +
+  geom_bar(position = position_dodge()) +
+  scale_fill_viridis_d()
+# scale_fill_viridis_d(option = "magma")
+
+# Tasks 3. and 4.
+post_meal_data |>
+  ggplot(aes(x = auc_pg, y = auc_ins, colour = BMI)) +
+  geom_point() +
+  scale_colour_viridis_c()
+# scale_colour_viridis_c(option = "inferno")
+```
+
+##  
