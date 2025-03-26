@@ -47,7 +47,7 @@ I am a 25-year-old **medical** student doing a research year at the department o
 3*3
 ```
 
-## Testing for Git 
+## Testing for Git
 
 The weather is medium. Not sunny, not rainy - but cloudy.
 
@@ -71,7 +71,7 @@ ggplot(post_meal_data, aes(x = BMI)) +
   geom_histogram()
 ```
 
-## Exercise: discrete plots 
+## Exercise: discrete plots
 
 ```{r}
 #| fig-cap: "Group status after a meal."
@@ -92,14 +92,14 @@ ggplot(post_meal_data, aes(x = glykemi)) +
 
 @fig-glykemi-bar
 
-## Plotting two discrete variables 
+## Plotting two discrete variables
 
 ```{r}
 ggplot(post_meal_data, aes(x = Group, fill = as.character(glykemi)))+
   geom_bar(position = position_dodge())
 ```
 
-## Side by side plots 
+## Side by side plots
 
 ```{r}
 ggplot(post_meal_data, aes(x = BMI)) + 
@@ -111,7 +111,7 @@ ggplot(post_meal_data, aes(x = glykemi)) +
   geom_bar()
 ```
 
-## Plotting two continuous variables 
+## Plotting two continuous variables
 
 ```{r side-by-side-figs}
 #| label: fig-bmi-glycemia
@@ -128,7 +128,7 @@ ggplot(post_meal_data, aes(x = glykemi)) +
 
 ```
 
-## Selecting data 
+## Selecting data
 
 ```{r}
 select(post_meal_data, Age)
@@ -161,7 +161,7 @@ small_post_meal_data |>
   )
 ```
 
-##  
+## 
 
 ```{r}
 # Task 1.
@@ -185,7 +185,7 @@ post_meal_data |>
   rename(Height = Length)
 ```
 
-## Filtering data 
+## Filtering data
 
 ```{r}
 small_post_meal_data |>
@@ -231,7 +231,7 @@ This lists both people who are in the control as well as anyone who is overweigh
 tidier_post_meal_data
 ```
 
-## Modifying columns 
+## Modifying columns
 
 ```{r}
 tidier_post_meal_data |>
@@ -267,4 +267,67 @@ post_meal_data |>
     percent_body_fat = (Fat.mass.DXA / Weight) * 100
   ) |> 
   filter(percent_body_fat > 30)
+```
+
+## Geoms notes
+
+-   [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html), which makes boxplots that show the median and a measure of range in the data. Boxplots are generally pretty good at showing the spread of data. However, like the reading task about “bar plots”, boxplots can still hide your actual data. It is generally fine to use, but a better geom might be jitter or violin.
+
+-   [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html), which makes a type of scatterplot, but for discrete and continuous variables. A useful argument to [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) is `width`, which controls how wide the jittered points span from the center line. This plot is much better than the boxplot since it shows the *actual data*, and not summaries like a boxplot does. However, it is not very good when you have lots of data points.
+
+-   [`geom_violin()`](https://ggplot2.tidyverse.org/reference/geom_violin.html), which shows a density distribution like [`geom_density()`](https://ggplot2.tidyverse.org/reference/geom_density.html). This geom is great when there is a lot of data and [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) may otherwise appear as a mass of dots.
+
+## Visualizing with a jitter plot
+
+We'll use jitter because the data are quite small. But the way you use geoms is the same.
+
+```{r}
+tidied_post_meal_data |>
+  mutate(overweight = if_else(BMI >= 25, "Overweight", "Not overweight")) |>
+  ggplot(aes(x = overweight, y = insulin_glucose_ratio)) +
+  geom_jitter()
+```
+
+## Plotting three or more variables
+
+```{r}
+tidied_post_meal_data |>
+  filter(BMI < 30) |>
+  ggplot(aes(x = Age, y = auc_insulin, colour = Group)) +
+  geom_point()
+```
+
+```{r}
+tidied_post_meal_data |>
+  filter(BMI < 30) |>
+  mutate(young = if_else(Age < 40, "Young", "Old")) |>
+  ggplot(aes(x = BMI, y = insulin_glucose_ratio, colour = Group)) +
+  geom_point() +
+  facet_grid(cols = vars(young))
+```
+
+```{r}
+tidied_post_meal_data |>
+  filter(BMI < 30) |>
+  mutate(young = if_else(Age < 40, "Young", "Old")) |>
+  ggplot(aes(x = BMI, y = insulin_glucose_ratio, colour = Group)) +
+  geom_point() +
+  facet_grid(rows = vars(young))
+```
+
+Der er tilføjet titler på hhv. X og Y aksen, ved at bruge labs (x = , y= )
+
+For at gemme et plot kan man bruge ggsave() function
+
+```{r}
+tidied_post_meal_data |>
+  filter(BMI < 30) |>
+  mutate(young = if_else(Age < 40, "Young", "Old")) |>
+  ggplot(aes(x = BMI, y = insulin_glucose_ratio, colour = Group)) +
+  geom_point() +
+  facet_grid(rows = vars(young)) +
+  labs(
+    x = "Body mass index (BMI)",
+    y = "Insulin to glucose ratio"
+  )
 ```
