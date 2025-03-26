@@ -398,4 +398,54 @@ post_meal_data |>
 # scale_colour_viridis_c(option = "inferno")
 ```
 
-##  
+-   Pipe `|>` the output of your wrangling directly into making a plot to streamline your code.
+
+<!-- -->
+
+-   Use [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html), [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html), or [`geom_violin()`](https://ggplot2.tidyverse.org/reference/geom_violin.html) to show the relationship between a continuous and a discrete variable.
+
+-   To plot more dimensions, use colour, the X axis, the Y axis, or [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html).
+
+-   Use colour blind-friendly palettes, such as [viridis](https://sjmgarnier.github.io/viridis/).
+
+## Calculating summary statistics
+
+Using summarise() witout usind group_by().
+
+```{r}
+tidied_post_meal_data |>
+  summarise(max_bmi = max(BMI))
+```
+
+We now see the max value BMI in the data.
+
+Sometimes, if there are missing values in your data, you might get `NA` as a result, which means “missing”. In R, `NA` values “propagate”, meaning that if there is one value missing, then the max or mean value will also be missing. When this happens, we need to tell [`max()`](https://rdrr.io/r/base/Extremes.html) to exclude any `NA` values from the calculation by using the argument `na.rm = TRUE`.
+
+```{r}
+tidied_post_meal_data |>
+  summarise(
+    max_bmi = max(BMI),
+    min_bmi = min(BMI)
+  )
+```
+
+## Summarise with group by 
+
+```{r}
+tidied_post_meal_data |>
+  group_by(Group) |>
+  summarise(
+    mean_age = mean(Age),
+    mean_bmi = mean(BMI)
+  )
+```
+
+```{r}
+tidied_post_meal_data |>
+  group_by(Group) |>
+  summarise(
+    mean_age = mean(Age),
+    mean_bmi = mean(BMI)
+  ) |>
+  ungroup()
+```
